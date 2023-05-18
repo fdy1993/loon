@@ -2,6 +2,7 @@
 // 你可以根据你自己的需求，修改下面的参数
 const PORTS = [80, 443]; // 端口号
 const MAX_LATENCY = 100; // 延迟阈值，单位为毫秒
+const TEST_URL = "https://www.google.com"; // 测延迟的地址
 
 // 获取节点列表
 let nodes = $resource.nodes();
@@ -16,7 +17,7 @@ nodes = nodes.filter(node => {
 function testNodeLatency(node) {
   return new Promise((resolve, reject) => {
     // 调用$resource.testLatency方法，传入节点和回调函数
-    $resource.testLatency(node, (latency, error) => {
+    $resource.testLatency(node, TEST_URL， (latency, error) => {
       // 如果有错误，就拒绝这个Promise，并打印错误信息
       if (error) {
         reject(error);
