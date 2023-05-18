@@ -2,7 +2,7 @@
 // 你可以根据你自己的需求，修改下面的参数
 const PORTS = [80, 443]; // 端口号
 const MAX_LATENCY = 100; // 延迟阈值，单位为毫秒
-const TEST_URL = "https://www.google.com"; // 测延迟的地址
+const TEST_URL = "http://cp.cloudflare.com/generate_204"; // 测延迟的地址
 
 // 获取节点列表
 let nodes = $resource.nodes();
