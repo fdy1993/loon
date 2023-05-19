@@ -6,7 +6,6 @@ function filter(proxy) {
   if (proxy.delay < 200) {
     return true;
   }
-  }
   // 其他情况返回false
   return false;
 }
