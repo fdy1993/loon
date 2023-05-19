@@ -6,9 +6,6 @@ function filter(proxy) {
   if (proxy.delay < 200) {
     return true;
   }
-  // 只保留地区为美国或日本的节点
-  if (proxy.region === "US" || proxy.region === "JP") {
-    return true;
   }
   // 其他情况返回false
   return false;
