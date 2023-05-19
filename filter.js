@@ -16,26 +16,24 @@
 // }
 
 
-const MAX_LATENCY = 100; // 延迟阈值，单位为毫秒
-const TEST_URL = "http://cp.cloudflare.com/generate_204"; // 测延迟的地址
-
-// 定义一个过滤器函数，接受一个代理列表作为参数
-async function filter(proxies) {
-  // 定义一个新的数组，用于存放过滤后的节点
-  let filteredNodes = [];
-
-  // 遍历所有节点，对每个节点进行延迟测试，并把返回的延迟值赋给节点的delay属性
-  for (let node of proxies) {
-    node.delay = await $resource.testLatency(node, TEST_URL);
-  }
-
-  // 遍历所有节点，如果延迟低于阈值，就把这个节点放入新的数组中
-  for (let node of proxies) {
-    if (node.delay < MAX_LATENCY) {
-      filteredNodes.push(node);
-    } 
-  }
-  proxies = filteredNodes
-  // 返回过滤后的节点列表
-  return proxies;
+function filter(proxies) {
+  // 过滤出名字含有香港等节点
+  return proxies.map(p => p.name.indexOf("香港") !== -1);
 }
+
+// 测试节点延迟并删除掉延迟超过300ms节点
+function testAndDelete(proxies) {
+  // 使用script operator修改proxy属性
+  return proxies.map(p => {
+    // 调用sub-store的API测试延迟
+    let latency = $subStore.api.testLatency(p);
+    // 如果延迟大于300ms，设置discard属性为true
+    if (latency > 300) {
+      p.discard = true;
+    }
+    return p;
+  });
+}
+
+// 最终返回过滤后节点的sub-store脚本过滤器
+return testAndDelete(filter(proxies));
