@@ -15,35 +15,27 @@
 //   }
 // }
 
-// 引入ping模块
-const ping = require('ping');
 
-// 定义一个测试延迟的函数，接受一个代理列表作为参数
-function testDelay(proxies) {
-  // 遍历代理列表
-  proxies.forEach(p => {
-    // 获取代理的主机名
-    const host = p.name.split('@')[1];
-    // 调用ping模块的promisePing方法，传入主机名和一些选项
-    ping.promise.probe(host, {
-      timeout: 10,
-      extra: ['-i', '2'],
-    }).then(function (res) {
-      // 如果测试成功，把平均延迟赋值给代理的delay属性
-      if (res.alive) {
-        p.delay = res.avg;
-      } else {
-        // 如果测试失败，把延迟赋值为-1
-        p.delay = -1;
-      }
-    });
-  });
-}
+const MAX_LATENCY = 100; // 延迟阈值，单位为毫秒
+const TEST_URL = "http://cp.cloudflare.com/generate_204"; // 测延迟的地址
 
 // 定义一个过滤器函数，接受一个代理列表作为参数
-function filter(proxies) {
-  // 先调用测试延迟的函数
-  testDelay(proxies);
-  // 过滤出延迟小于等于300ms的节点
-  return proxies.map(p => p.delay <= 300);
+async function filter(proxies) {
+  // 定义一个新的数组，用于存放过滤后的节点
+  let filteredNodes = [];
+
+  // 遍历所有节点，对每个节点进行延迟测试，并把返回的延迟值赋给节点的delay属性
+  for (let node of proxies) {
+    node.delay = await $resource.testLatency(node, TEST_URL);
+  }
+
+  // 遍历所有节点，如果延迟低于阈值，就把这个节点放入新的数组中
+  for (let node of proxies) {
+    if (node.delay < MAX_LATENCY) {
+      filteredNodes.push(node);
+    } 
+  }
+  proxies = filteredNodes
+  // 返回过滤后的节点列表
+  return proxies;
 }
