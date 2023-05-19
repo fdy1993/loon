@@ -22,18 +22,18 @@ function filter(proxies) {
 }
 
 // 测试节点延迟并删除掉延迟超过300ms节点
-function testAndDelete(proxies) {
-  // 使用script operator修改proxy属性
-  return proxies.map(p => {
-    // 调用sub-store的API测试延迟
-    let latency = $subStore.api.testLatency(p);
-    // 如果延迟大于300ms，设置discard属性为true
-    if (latency > 300) {
-      p.discard = true;
-    }
-    return p;
-  });
-}
+// function testAndDelete(proxies) {
+//   // 使用script operator修改proxy属性
+//   return proxies.map(p => {
+//     // 调用sub-store的API测试延迟
+//     let latency = $subStore.api.testLatency(p);
+//     // 如果延迟大于300ms，设置discard属性为true
+//     if (latency > 300) {
+//       p.discard = true;
+//     }
+//     return p;
+//   });
+// }
 
-// 最终返回过滤后节点的sub-store脚本过滤器
-return testAndDelete(filter(proxies));
+// // 最终返回过滤后节点的sub-store脚本过滤器
+// return testAndDelete(filter(proxies));
