@@ -15,25 +15,17 @@
 //   }
 // }
 
-
-function filter(proxies) {
-  // 过滤出名字含有香港等节点
-  return proxies.map(p => p.name.indexOf("香港") !== -1);
+// 这个函数用于测试和过滤代理数组
+// proxies: 一个代理对象的数组
+// testUrl: 一个可选的测试地址，默认为"http://cp.cloudflare.com/generate_204"
+// timeout: 一个可选的超时时间，单位为毫秒，默认为300
+function filter(proxies, testUrl = "http://cp.cloudflare.com/generate_204", timeout = 300) {
+  return proxies.map(p => {
+    // 测试代理的延迟
+    const latency = $subStore.api.testLatency(p, testUrl, timeout);
+    // 如果延迟大于300毫秒，设置discard属性为true
+    p.discard = latency > 300 ? true : false;
+    // 返回修改后的代理对象
+    return p;
+  });
 }
-
-// 测试节点延迟并删除掉延迟超过300ms节点
-// function testAndDelete(proxies) {
-//   // 使用script operator修改proxy属性
-//   return proxies.map(p => {
-//     // 调用sub-store的API测试延迟
-//     let latency = $subStore.api.testLatency(p);
-//     // 如果延迟大于300ms，设置discard属性为true
-//     if (latency > 300) {
-//       p.discard = true;
-//     }
-//     return p;
-//   });
-// }
-
-// // 最终返回过滤后节点的sub-store脚本过滤器
-// return testAndDelete(filter(proxies));
