@@ -57,47 +57,34 @@ class ResourceCache {
 const resourceCache = new ResourceCache(CACHE_EXPIRATION_TIME_MS);
 
 async function operator(proxies) {
-    const { isLoon, isSurge } = $substore.env;
-    let support = false;
-    if (isLoon) {
-        support = true;
-    } else if (isSurge) {
-        const build = $environment['surge-build'];
-        if (build && parseInt(build) >= 2407) {
-            support = true;
-        }
+    const batches = [];
+    const BATCH_SIZE = 10;
+
+    let i = 0;
+    while (i < proxies.length) {
+        const batch = proxies.slice(i, i + BATCH_SIZE);
+        await Promise.all(batch.map(async proxy => {
+            try {
+                // remove the original flag
+                let proxyName = removeFlag(proxy.name);
+
+                // query ip-api
+                const countryCode = await queryIpApi(proxy);
+
+                proxyName = getFlagEmoji(countryCode) + ' ' + proxyName;
+                proxy.name = proxyName;
+            } catch (err) {
+                // TODO:
+            }
+        }));
+
+        await sleep(1000);
+        i += BATCH_SIZE;
     }
 
-    if (support) {
-        const batches = [];
-        const BATCH_SIZE = 10;
-
-        let i = 0;
-        while (i < proxies.length) {
-            const batch = proxies.slice(i, i + BATCH_SIZE);
-            await Promise.all(batch.map(async proxy => {
-                try {
-                    // remove the original flag
-                    let proxyName = removeFlag(proxy.name);
-
-                    // query ip-api
-                    const countryCode = await queryIpApi(proxy);
-
-                    proxyName = getFlagEmoji(countryCode) + ' ' + proxyName;
-                    proxy.name = proxyName;
-                } catch (err) {
-                    // TODO: 
-                }
-            }));
-
-            await sleep(1000);
-            i += BATCH_SIZE;
-        }
-    } else {
-        $.error(`IP Flag only supports Loon and Surge!`);
-    }
     return proxies;
 }
+
 
 const tasks = new Map();
 async function queryIpApi(proxy) {
