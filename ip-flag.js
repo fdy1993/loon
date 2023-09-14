@@ -1,9 +1,35 @@
-// const RESOURCE_CACHE_KEY = '#sub-store-cached-resource';
-// const CACHE_EXPIRATION_TIME_MS = 10 * 60 * 1000;
-// const $ = $substore;
+const RESOURCE_CACHE_KEY = '#sub-store-cached-resource';
+const CACHE_EXPIRATION_TIME_MS = 10 * 60 * 1000;
+const $ = $substore;
 
 class ResourceCache {
+    constructor(expires) {
+        this.expires = expires;
+        if (!$.read(RESOURCE_CACHE_KEY)) {
+            $.write('{}', RESOURCE_CACHE_KEY);
+        }
+        this.resourceCache = JSON.parse($.read(RESOURCE_CACHE_KEY));
+        this._cleanup();
+    }
 
+    _cleanup() {
+        // clear obsolete cached resource
+        let clear = false;
+        Object.entries(this.resourceCache).forEach((entry) => {
+            const [id, updated] = entry;
+            if (!updated.time) {
+                // clear old version cache
+                delete this.resourceCache[id];
+                $.delete(`#${id}`);
+                clear = true;
+            }
+            if (new Date().getTime() - updated.time > this.expires) {
+                delete this.resourceCache[id];
+                clear = true;
+            }
+        });
+        if (clear) this._persist();
+    }
 
     revokeAll() {
         this.resourceCache = {};
@@ -31,7 +57,16 @@ class ResourceCache {
 const resourceCache = new ResourceCache(CACHE_EXPIRATION_TIME_MS);
 
 async function operator(proxies) {
-    let support = false;
+    // const { isLoon, isSurge } = $substore.env;
+    let support = true;
+    // if (isLoon) {
+    //     support = true;
+    // } else if (isSurge) {
+    //     const build = $environment['surge-build'];
+    //     if (build && parseInt(build) >= 2407) {
+    //         support = true;
+    //     }
+    // }
 
     if (support) {
         const batches = [];
@@ -75,6 +110,8 @@ async function queryIpApi(proxy) {
     const headers = {
         "User-Agent": ua
     };
+    const { isLoon } = $substore.env;
+    const target = isLoon ? "Loon" : "Surge";
     const result = new Promise((resolve, reject) => {
         const cached = resourceCache.get(id);
         if (cached) {
@@ -83,9 +120,11 @@ async function queryIpApi(proxy) {
         const url = `http://ip-api.com/json`;
         let node = ProxyUtils.produce([proxy], target);
 
-
-        const s = node.indexOf("=");
-        node = node.substring(s + 1);
+        // Loon 需要去掉节点名字
+        if (isLoon) {
+            const s = node.indexOf("=");
+            node = node.substring(s + 1);
+        }
 
         $.http.get({
             url,
