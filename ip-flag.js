@@ -1,6 +1,6 @@
 const RESOURCE_CACHE_KEY = '#sub-store-cached-resource';
 const CACHE_EXPIRATION_TIME_MS = 10 * 60 * 1000;
-const $ = $substore;
+// const $ = $substore;
 
 class ResourceCache {
     constructor(expires) {
@@ -94,7 +94,7 @@ async function operator(proxies) {
             i += BATCH_SIZE;
         }
     } else {
-        $.error(`IP Flag only supports Loon and Surge!`);
+         
     }
     return proxies;
 }
@@ -110,7 +110,8 @@ async function queryIpApi(proxy) {
     const headers = {
         "User-Agent": ua
     };
-    const { isLoon } = $substore.env;
+    // const { isLoon } = $substore.env;
+    const isLoon = true
     const target = isLoon ? "Loon" : "Surge";
     const result = new Promise((resolve, reject) => {
         const cached = resourceCache.get(id);
