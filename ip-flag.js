@@ -1,6 +1,6 @@
 const RESOURCE_CACHE_KEY = '#sub-store-cached-resource';
 const CACHE_EXPIRATION_TIME_MS = 10 * 60 * 1000;
-// const $ = $substore;
+const $ = $substore;
 
 class ResourceCache {
     constructor(expires) {
@@ -58,15 +58,16 @@ const resourceCache = new ResourceCache(CACHE_EXPIRATION_TIME_MS);
 
 async function operator(proxies) {
     // const { isLoon, isSurge } = $substore.env;
-    let support = true;
-    // if (isLoon) {
-    //     support = true;
-    // } else if (isSurge) {
-    //     const build = $environment['surge-build'];
-    //     if (build && parseInt(build) >= 2407) {
-    //         support = true;
-    //     }
-    // }
+    const isLoon = true;
+    let support = false;
+    if (isLoon) {
+        support = true;
+    } else if (isSurge) {
+        const build = $environment['surge-build'];
+        if (build && parseInt(build) >= 2407) {
+            support = true;
+        }
+    }
 
     if (support) {
         const batches = [];
