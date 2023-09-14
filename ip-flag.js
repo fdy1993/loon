@@ -57,34 +57,38 @@ class ResourceCache {
 const resourceCache = new ResourceCache(CACHE_EXPIRATION_TIME_MS);
 
 async function operator(proxies) {
-    const batches = [];
-    const BATCH_SIZE = 10;
+    let support = false;
 
-    let i = 0;
-    while (i < proxies.length) {
-        const batch = proxies.slice(i, i + BATCH_SIZE);
-        await Promise.all(batch.map(async proxy => {
-            try {
-                // remove the original flag
-                let proxyName = removeFlag(proxy.name);
+    if (support) {
+        const batches = [];
+        const BATCH_SIZE = 10;
 
-                // query ip-api
-                const countryCode = await queryIpApi(proxy);
+        let i = 0;
+        while (i < proxies.length) {
+            const batch = proxies.slice(i, i + BATCH_SIZE);
+            await Promise.all(batch.map(async proxy => {
+                try {
+                    // remove the original flag
+                    let proxyName = removeFlag(proxy.name);
 
-                proxyName = getFlagEmoji(countryCode) + ' ' + proxyName;
-                proxy.name = proxyName;
-            } catch (err) {
-                // TODO:
-            }
-        }));
+                    // query ip-api
+                    const countryCode = await queryIpApi(proxy);
 
-        await sleep(1000);
-        i += BATCH_SIZE;
+                    proxyName = getFlagEmoji(countryCode) + ' ' + proxyName;
+                    proxy.name = proxyName;
+                } catch (err) {
+                    // TODO: 
+                }
+            }));
+
+            await sleep(1000);
+            i += BATCH_SIZE;
+        }
+    } else {
+        $.error(`IP Flag only supports Loon and Surge!`);
     }
-
     return proxies;
 }
-
 
 const tasks = new Map();
 async function queryIpApi(proxy) {
@@ -97,8 +101,6 @@ async function queryIpApi(proxy) {
     const headers = {
         "User-Agent": ua
     };
-    const { isLoon } = $substore.env;
-    const target = isLoon ? "Loon" : "Surge";
     const result = new Promise((resolve, reject) => {
         const cached = resourceCache.get(id);
         if (cached) {
@@ -107,11 +109,9 @@ async function queryIpApi(proxy) {
         const url = `http://ip-api.com/json`;
         let node = ProxyUtils.produce([proxy], target);
 
-        // Loon 需要去掉节点名字
-        if (isLoon) {
-            const s = node.indexOf("=");
-            node = node.substring(s + 1);
-        }
+
+        const s = node.indexOf("=");
+        node = node.substring(s + 1);
 
         $.http.get({
             url,
