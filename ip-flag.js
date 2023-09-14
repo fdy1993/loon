@@ -1,35 +1,9 @@
-const RESOURCE_CACHE_KEY = '#sub-store-cached-resource';
-const CACHE_EXPIRATION_TIME_MS = 10 * 60 * 1000;
-const $ = $substore;
+// const RESOURCE_CACHE_KEY = '#sub-store-cached-resource';
+// const CACHE_EXPIRATION_TIME_MS = 10 * 60 * 1000;
+// const $ = $substore;
 
 class ResourceCache {
-    constructor(expires) {
-        this.expires = expires;
-        if (!$.read(RESOURCE_CACHE_KEY)) {
-            $.write('{}', RESOURCE_CACHE_KEY);
-        }
-        this.resourceCache = JSON.parse($.read(RESOURCE_CACHE_KEY));
-        this._cleanup();
-    }
 
-    _cleanup() {
-        // clear obsolete cached resource
-        let clear = false;
-        Object.entries(this.resourceCache).forEach((entry) => {
-            const [id, updated] = entry;
-            if (!updated.time) {
-                // clear old version cache
-                delete this.resourceCache[id];
-                $.delete(`#${id}`);
-                clear = true;
-            }
-            if (new Date().getTime() - updated.time > this.expires) {
-                delete this.resourceCache[id];
-                clear = true;
-            }
-        });
-        if (clear) this._persist();
-    }
 
     revokeAll() {
         this.resourceCache = {};
