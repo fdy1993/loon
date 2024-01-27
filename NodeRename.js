@@ -194,11 +194,13 @@ const SUB_STORE_SCHEMA = {
 
 const $ = $substore;
 const iar = $arguments;
-console.log('fandeyi111111111', $substore.env)
+console.log('fandeyi111111111' + $substore.env)
 let FGF = iar.fgf == undefined ? " " : decodeURI(iar.fgf),FGFS = FGF,debug = iar.debug;
 const { yw, bl, iisp, xy,  yisp, yun, city, flag, inflag, game, yuan, sheng, offtz, snone: numone} = iar;
 const h = iar.h ? decodeURI(iar.h) : "",min = iar.min ? decodeURI(iar.min) : "",firstN = iar.name ? decodeURI(iar.name) : "";
+console.log('fandeyi111111111' + $substore.env)
 const XHFGF = iar.sn == undefined ? " " : decodeURI(iar.sn),{ isLoon: isLoon, isSurge: isSurge } = $substore.env, dns = iar.dnsjx,target = isLoon ? "Loon" : isSurge ? "Surge" : undefined,keypr= "peedtest";
+console.log('fandeyi111111111' + $substore.env)
 let cd = iar.cd ? iar.cd : 0, timeout = iar.timeout ? iar.timeout : 2000, writet = "", innum = 1728e5, loontrue = false, onen = false, Sue = false, rawtime = 1500;
 const keyp = "3.s",EXPIRATION_KEY = "#sub-store-csr-expiration-time";
 if (min !== "") {
@@ -232,6 +234,7 @@ async function operator(e = [], targetPlatform, env) {
       }
   }
   function klog(...arg) {
+    console.log('fandeyi111111111' + $substore.env)
     console.log('[节点处理器] ' +subcoll+ tzname +" : "+ arg);
   }
   if (e.length < 1) {$.notify(subcoll +tzname,"订阅无节点","");return e;}
@@ -239,6 +242,8 @@ async function operator(e = [], targetPlatform, env) {
   let bs = iar.bs ? iar.bs : 9;
   const ein = e.length;
   const eins = ein/2;
+  console.log('fandeyi111111111' + $substore.env)
+  klog('fandeyi111111111' + $substore.env)
   klog(`开始处理节点: ${ein} 个`);
   klog(`批处理节点数: ${bs} 个`);
   klog(`设定api超时: ${zhTime(timeout)}`);
@@ -259,6 +264,7 @@ async function operator(e = [], targetPlatform, env) {
           if (cacheds) cachen++;
           if (cachen > eins) {
             if (!onen) {
+            klog('fandeyi111111111' + $substore.env)
               klog(`检查缓存数量: ${cachen}/${ein} 个`);
               rawtime = timeout;
               timeout = cd;
@@ -448,6 +454,7 @@ async function operator(e = [], targetPlatform, env) {
         })
       );
       i += bs;
+      klog('fandeyi111111111' + $substore.env)
       klog(`处理进度${i}/${ein}`)
       if (!onen){
         if(!offtz && (ein > (i*2))){
@@ -490,6 +497,7 @@ async function operator(e = [], targetPlatform, env) {
   }
   apiRead > 0 ? klog(`读取api缓存: ${apiRead} 个`) : null;
   apiw > 0 ? klog(`写入api缓存: ${apiw} 个`) : null;
+  klog('fandeyi111111111' + $substore.env)
   klog(`处理完后剩余: ${eout} 个`);
   const Nullv ='#SubStoreNullvalue';
   if (eout === 0 && ein !== 0){
