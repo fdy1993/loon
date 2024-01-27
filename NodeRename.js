@@ -524,8 +524,10 @@ async function operator(e = [], targetPlatform, env) {
   }
   klog(`此方法总用时: ${zhTime(timeDiff)}\n----节点处理器----\n\n\n\n\n`);
   const readklog = apiRead ? `读取缓存:${apiRead} ` : "";
+  klog('fandeyi111111111' + $substore.env)
   const writeklog = apiw ? `写入缓存:${apiw}, ` : "";
-  const Push = (eout === ein && eout === 0) ? "" : (eout === ein ? "全部通过测试, " : "去除无效节点后有" + eout + "个, ");
+  const Push = (eout === ein && eout === 0) ? "" : (eout === ein ? "全部通过测试, " : "去除无效节点后有" + eout + "个, fdy111" + $substore.env);
+  klog('fandeyi111111111' + $substore.env)
   if (!offtz) {$.notify(
       `${subcoll}${tzname} 共${ein}个节点`,
       "",
