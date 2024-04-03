@@ -9,7 +9,7 @@
       {
         "tag": "google",
         "address": "https://8.8.8.8/dns-query",
-        "detour": "Proxy"
+        "detour": "proxy"
       },
       {
         "tag": "tx",
@@ -158,7 +158,7 @@
       },
       {
         "rule_set": "geolocation-!cn",
-        "outbound": "proxy"
+        "outbound": ""
       },
       {
         "rule_set": "geosite-private",
@@ -369,7 +369,7 @@
       "auto_route": true,
       "sniff": true,
       "platform": {
-        "http_proxy": {
+        "http_": {
           "enabled": true,
           "server": "127.0.0.1",
           "server_port": 7890
@@ -703,20 +703,13 @@
       "default": "kr-auto"
     },
     {
-      "tag":"China",
-      "type":"selector",
-      "outbounds":[
-        "direct",
-        "Proxy"
-      ]
-    },
-    {
       "tag":"AdBlock",
       "type":"selector",
       "outbounds":[
         "block",
         "direct"
-      ]
+      ],
+      "default": "block"
     },
     {
       "tag": "final",
