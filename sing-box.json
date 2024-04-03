@@ -61,6 +61,7 @@
         "server": "google"
       }
     ],
+    "strategy": "prefer_ipv4",
     "final": "tx",
     "independent_cache": true
   },
@@ -95,6 +96,14 @@
           "d.metacubex.one"
         ],
         "outbound": "direct"
+      },
+      {
+        "clash_mode": "Direct",
+        "outbound": "direct"
+      },
+      {
+        "clash_mode": "Global",
+        "outbound": "GLOBAL"
       },
       {
         "rule_set": ["geoip-bilibili", "geosite-bilibili"],
@@ -150,7 +159,7 @@
       },
       {
         "rule_set": "geolocation-!cn",
-        "outbound": ""
+        "outbound": "proxy"
       },
       {
         "rule_set": "geosite-private",
@@ -361,7 +370,7 @@
       "auto_route": true,
       "sniff": true,
       "platform": {
-        "http_": {
+        "http_proxy": {
           "enabled": true,
           "server": "127.0.0.1",
           "server_port": 7890
@@ -700,8 +709,7 @@
       "outbounds":[
         "block",
         "direct"
-      ],
-      "default": "block"
+      ]
     },
     {
       "tag": "final",
