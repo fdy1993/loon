@@ -398,7 +398,7 @@
         "all-auto",
         "direct"
       ],
-      "default": "hk-auto"
+      "default": "all-auto"
     },
     {
       "tag": "google",
