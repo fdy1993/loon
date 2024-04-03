@@ -97,14 +97,6 @@
         "outbound": "direct"
       },
       {
-        "clash_mode": "Direct",
-        "outbound": "direct"
-      },
-      {
-        "clash_mode": "Global",
-        "outbound": "GLOBAL"
-      },
-      {
         "rule_set": ["geoip-bilibili", "geosite-bilibili"],
         "outbound": "bilibili"
       },
