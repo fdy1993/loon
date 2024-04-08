@@ -61,7 +61,7 @@
         "server": "google"
       }
     ],
-    "strategy": "prefer_ipv4",
+    "strategy": "prefer_ipv6",
     "final": "tx",
     "independent_cache": true
   },
