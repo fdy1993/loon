@@ -103,7 +103,7 @@
       },
       {
         "clash_mode": "global",
-        "outbound": "global"
+        "outbound": "GLOBAL"
       },
       {
         "rule_set": ["geoip-bilibili", "geosite-bilibili"],
