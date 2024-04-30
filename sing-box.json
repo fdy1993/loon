@@ -98,12 +98,12 @@
         "outbound": "direct"
       },
       {
-        "clash_mode": "Direct",
+        "clash_mode": "direct",
         "outbound": "direct"
       },
       {
-        "clash_mode": "Global",
-        "outbound": "GLOBAL"
+        "clash_mode": "global",
+        "outbound": "global"
       },
       {
         "rule_set": ["geoip-bilibili", "geosite-bilibili"],
@@ -781,7 +781,7 @@
       "tag": "hk-auto",
       "type": "urltest",
       "outbounds": [],
-      "url": "http://www.apple.com/library/test/success.html",
+      "url": "http://1.0.0.1",
       "interval": "1m",
       "tolerance": 50
     },
@@ -789,7 +789,7 @@
       "tag": "tw-auto",
       "type": "urltest",
       "outbounds": [],
-      "url": "http://www.apple.com/library/test/success.html",
+      "url": "http://1.0.0.1",
       "interval": "1m",
       "tolerance": 50
     },
@@ -797,7 +797,7 @@
       "tag": "jp-auto",
       "type": "urltest",
       "outbounds": [],
-      "url": "http://www.apple.com/library/test/success.html",
+      "url": "http://1.0.0.1",
       "interval": "1m",
       "tolerance": 50
     },
@@ -805,7 +805,7 @@
       "tag": "sg-auto",
       "type": "urltest",
       "outbounds": [],
-      "url": "http://www.apple.com/library/test/success.html",
+      "url": "http://1.0.0.1",
       "interval": "1m",
       "tolerance": 50
     },
@@ -813,7 +813,7 @@
       "tag": "kr-auto",
       "type": "urltest",
       "outbounds": [],
-      "url": "http://www.apple.com/library/test/success.html",
+      "url": "http://1.0.0.1",
       "interval": "1m",
       "tolerance": 50
     },
@@ -821,7 +821,7 @@
       "tag": "us-auto",
       "type": "urltest",
       "outbounds": [],
-      "url": "http://www.apple.com/library/test/success.html",
+      "url": "http://1.0.0.1",
       "interval": "1m",
       "tolerance": 50
     },
@@ -829,7 +829,7 @@
       "tag": "all-auto",
       "type": "urltest",
       "outbounds": [],
-      "url": "http://www.apple.com/library/test/success.html",
+      "url": "http://1.0.0.1",
       "interval": "1m",
       "tolerance": 50
     },
