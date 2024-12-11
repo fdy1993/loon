@@ -128,7 +128,7 @@
   ],
   "outbounds": [
     {
-      "tag":"Proxy",
+      "tag":"proxy",
       "type":"selector",
       "outbounds":[
         "all-auto",
@@ -594,6 +594,14 @@
       "tolerance": 50
     },
     {
+      "tag": "all-auto",
+      "type": "urltest",
+      "outbounds": [],
+      "url": "http://www.apple.com/library/test/success.html",
+      "interval": "10m",
+      "tolerance": 50
+    },
+    {
       "type": "direct",
       "tag": "direct"
     },
@@ -608,7 +616,7 @@
   ],
   "route": {
     "auto_detect_interface": true,
-    "final": "Proxy",
+    "final": "proxy",
     "rules": [
       {
         "type": "logical",
