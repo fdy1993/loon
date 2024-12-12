@@ -133,7 +133,7 @@
       "outbounds":[
         "all-auto",
         "direct",
-        "{all}"
+        "all"
       ]
     },
     {
