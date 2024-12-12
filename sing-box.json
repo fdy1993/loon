@@ -641,7 +641,7 @@
       },
       {
         "clash_mode": "global",
-        "outbound": "Proxy"
+        "outbound": "proxy"
       },
       {
         "domain": [
