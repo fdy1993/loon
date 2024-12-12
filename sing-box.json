@@ -271,14 +271,15 @@
         "us-auto",
         "all",
         "all-auto"
-      ]
+      ],
+      "default": "direct"
     },
     {
       "tag":"Bahamut",
       "type":"selector",
       "outbounds":[
-        "TaiWan",
-        "Proxy"
+        "tw-auto",
+        "proxy"
       ]
     },
     {
@@ -464,12 +465,11 @@
       "tag":"Streaming",
       "type":"selector",
       "outbounds":[
-        "HongKong",
-        "TaiWan",
-        "Singapore",
-        "Japan",
-        "America",
-        "Others"
+        "hg-auto",
+        "tw-auto",
+        "sg-auto",
+        "jp-auto",
+        "us-auto"
       ]
     },
     {
@@ -499,7 +499,7 @@
       "type":"selector",
       "outbounds":[
         "direct",
-        "Proxy"
+        "proxy"
       ]
     },
     {
