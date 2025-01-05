@@ -644,7 +644,6 @@
           },
           {
             "protocol": "dns",
-            "action": "hijack-dns"
           }
         ],
         "outbound": "dns-out"
