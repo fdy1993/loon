@@ -183,7 +183,7 @@
       {
         "rule_set": [
           "facbook_ip",
-          "facbook_domian"
+          "facbook_domain"
         ],
         "action": "route",
         "outbound": "facbook"
