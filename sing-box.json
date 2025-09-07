@@ -826,7 +826,6 @@
     },
     "cache_file": {
       "enabled": true,
-	  "path": "/etc/momo/run/cache.db",
       "store_fakeip": true
     }
   },
