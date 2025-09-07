@@ -266,25 +266,25 @@
     "default_domain_resolver": {"server": "public"}
   },
   "outbounds": [
-		{
-			"tag": "proxy",
-			type": "selector",
-			"outbounds": [
-			"hk",
-			"hk-auto",
-			"tw",
-			"tw-auto",
-			"jp",
-			"jp-auto",
-			"sg",
-			"sg-auto",
-			"kr",
-			"kr-auto",
-			"us",
-			"us-auto",
-			"all",
-			"all-auto",
-			"direct"
+	{
+	"tag": "proxy",
+	  type": "selector",
+	  "outbounds": [
+		"hk",
+		"hk-auto",
+		"tw",
+		"tw-auto",
+		"jp",
+		"jp-auto",
+		"sg",
+		"sg-auto",
+		"kr",
+		"kr-auto",
+		"us",
+		"us-auto",
+		"all",
+		"all-auto",
+		"direct"
       ],
       "default": "all-auto"
     },
