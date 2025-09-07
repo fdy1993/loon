@@ -1,57 +1,23 @@
 {
   "dns": {
     "servers": [
-      {
-        "tag": "google",
-        "type": "https",
-        "server": "8.8.8.8",
-        "detour": "proxy"
-      },
-      {
-        "tag": "ali",
-        "type": "https",
-        "server": "223.5.5.5",
-        "detour": "direct"
-      },
-      {
-        "tag": "fakeip",
-        "type": "fakeip",
-        "inet4_range": "198.18.0.0/15",
-        "inet6_range": "fc00::/18"
-      }
+      {"tag": "local", "type": "udp", "server": "223.5.5.5"},
+      {"tag": "public", "type": "https", "server": "dns.alidns.com", "domain_resolver": "local"},
+      {"tag": "foreign", "type": "https", "server": "8.8.8.8", "detour": "direct"},
+      {"tag": "fakeip", "type": "fakeip", "inet4_range": "198.18.0.0/15", "inet6_range": "fc00::/18"}
     ],
     "rules": [
-      {
-        "clash_mode": "Direct",
-        "action": "route",
-        "server": "ali"
-      },
-      {
-        "clash_mode": "Global",
-        "action": "route",
-        "server": "fakeip"
-      },
-      {
-        "query_type": "HTTPS",
-        "action": "reject"
-      },
-      {
-        "query_type": [
-          "A",
-          "AAAA"
-        ],
-        "action": "route",
-        "server": "fakeip",
-        "rewrite_ttl": 1
-      },
-      {
-        "rule_set": "cn_domain",
-        "action": "route",
-        "server": "ali"
-      }
+      {"clash_mode": "direct", "server": "local"},
+      {"clash_mode": "global", "server": "fakeip"},
+      {"query_type": "HTTPS", "action": "reject"},
+      {"domain_suffix": ["services.googleapis.cn", "googleapis.cn", "xn--ngstr-lra8j.com"], "server": "foreign"},
+      {"rule_set": ["geosite-cn", "geosite-steamcn", "geosite-apple"], "server": "local"},
+      {"query_type": ["A", "AAAA"], "server": "fakeip", "rewrite_ttl": 1}
     ],
-    "final": "google",
-    "independent_cache": true
+    "final": "foreign",
+    "strategy": "ipv4_only",
+    "independent_cache": true,
+    "reverse_mapping": true
   },
   "route": {
     "default_domain_resolver": {
@@ -68,37 +34,21 @@
         ],
         "timeout": "500ms"
       },
-      {
-        "type": "logical",
-        "mode": "or",
-        "rules": [
-          {
-            "port": 53
-          },
-          {
-            "protocol": "dns"
-          }
-        ],
-        "action": "hijack-dns"
-      },
+	  {"inbound": "dns-in", "action": "hijack-dns"},
       {
         "ip_is_private": true,
-        "action": "route",
         "outbound": "direct"
       },
       {
-        "clash_mode": "Global",
-        "action": "route",
+        "clash_mode": "global",
         "outbound": "GLOBAL"
       },
       {
-        "clash_mode": "Direct",
-        "action": "route",
+        "clash_mode": "direct",
         "outbound": "direct"
       },
       {
         "rule_set": "bilibili_domain",
-        "action": "route",
         "outbound": "bilibili"
       },
       {
@@ -106,54 +56,25 @@
           "netflix_ip",
           "netflix_domain"
         ],
-        "action": "route",
         "outbound": "netflix"
       },
       {
         "rule_set": "bahamut_domain",
-        "action": "route",
         "outbound": "bahamut"
       },
       {
         "rule_set": "youtube_domain",
-        "action": "route",
         "outbound": "youtube"
       },
       {
         "rule_set": "openai_domain",
-        "action": "route",
         "outbound": "openai"
-      },
-      {
-        "type": "logical",
-        "mode": "and",
-        "rules": [
-          {
-            "rule_set": "proxy_domain"
-          },
-          {
-            "invert": true,
-            "rule_set": [
-              "cn_domain",
-              "apple_domain",
-              "google_domain",
-              "telegram_domain",
-              "netflix_domain"
-            ]
-          }
-        ],
-        "action": "route",
-        "outbound": "proxy"
-      },
-      {
-        "action": "resolve"
       },
       {
         "rule_set": [
           "telegram_ip",
           "telegram_domain"
         ],
-        "action": "route",
         "outbound": "telegram"
       },
       {
@@ -161,7 +82,6 @@
           "google_ip",
           "google_domain"
         ],
-        "action": "route",
         "outbound": "google"
       },
       {
@@ -169,7 +89,6 @@
           "apple_ip",
           "apple_domain"
         ],
-        "action": "route",
         "outbound": "apple"
       },
       {
@@ -177,7 +96,6 @@
           "cn_ip",
           "cn_domain"
         ],
-        "action": "route",
         "outbound": "cn"
       }
     ],
@@ -345,28 +263,28 @@
       }
     ],
     "final": "final",
-    "auto_detect_interface": true
+    "default_domain_resolver": {"server": "public"}
   },
   "outbounds": [
-    {
-      "tag": "proxy",
-      "type": "selector",
-      "outbounds": [
-        "hk",
-        "hk-auto",
-        "tw",
-        "tw-auto",
-        "jp",
-        "jp-auto",
-        "sg",
-        "sg-auto",
-	   "kr",
-       "kr-auto",
-        "us",
-        "us-auto",
-        "all",
-        "all-auto",
-        "direct"
+		{
+			"tag": "proxy",
+			type": "selector",
+			"outbounds": [
+			"hk",
+			"hk-auto",
+			"tw",
+			"tw-auto",
+			"jp",
+			"jp-auto",
+			"sg",
+			"sg-auto",
+			"kr",
+			"kr-auto",
+			"us",
+			"us-auto",
+			"all",
+			"all-auto",
+			"direct"
       ],
       "default": "all-auto"
     },
@@ -859,25 +777,45 @@
   ],
   "inbounds": [
     {
-      "type": "tun",
-      "address": [
-        "172.19.0.0/30",
-        "fdfe:dcba:9876::0/126"
-      ],
-      "stack": "mixed",
-      "auto_route": true,
-      "platform": {
-        "http_proxy": {
-          "enabled": true,
-          "server": "127.0.0.1",
-          "server_port": 7890
-        }
-      }
+      "tag": "dns-in",
+      "type": "direct",
+      "listen": "::",
+      "listen_port": 1053
     },
     {
-      "type": "mixed",
-      "listen": "127.0.0.1",
+      "tag": "http-in",
+      "type": "http",
+      "listen": "::",
+      "listen_port": 8080
+    },
+    {
+      "tag": "socks-in",
+      "type": "socks",
+      "listen": "::",
+      "listen_port": 1080
+    },
+    {
+      "tag": "redirect-in",
+      "type": "redirect",
+      "listen": "::",
       "listen_port": 7890
+    },
+    {
+      "tag": "tproxy-in",
+      "type": "tproxy",
+      "listen": "::",
+      "listen_port": 7891
+    },
+    {
+      "tag": "tun-in",
+      "type": "tun",
+      "interface_name": "momo",
+      "address": [
+        "172.31.0.1/30",
+        "fdfe:dcba:9876::1/126"
+      ],
+      "auto_route": false,
+      "auto_redirect": false
     }
   ],
   "experimental": {
@@ -885,10 +823,13 @@
       "external_controller": "127.0.0.1:9090",
       "external_ui": "ui",
       "external_ui_download_url": "https://ghfast.top/https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip",
-      "external_ui_download_detour": "direct"
+      "external_ui_download_detour": "direct",
+	  "secret": "",
+      "default_mode": "rule"
     },
     "cache_file": {
       "enabled": true,
+	  "path": "/etc/momo/run/cache.db",
       "store_fakeip": true
     }
   },
