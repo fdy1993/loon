@@ -268,7 +268,7 @@
   "outbounds": [
 	{
 	"tag": "proxy",
-	  type": "selector",
+	  "type": "selector",
 	  "outbounds": [
 		"hk",
 		"hk-auto",
