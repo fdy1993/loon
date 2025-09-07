@@ -20,9 +20,6 @@
     "reverse_mapping": true
   },
   "route": {
-    "default_domain_resolver": {
-      "server": "ali"
-    },
     "rules": [
       {
         "action": "sniff",
