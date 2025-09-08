@@ -882,12 +882,6 @@
       "listen_port": 7890
     },
     {
-      "tag": "tproxy-in",
-      "type": "tproxy",
-      "listen": "::",
-      "listen_port": 11220
-    },
-    {
       "tag": "tun-in",
       "type": "tun",
       "interface_name": "momo",
